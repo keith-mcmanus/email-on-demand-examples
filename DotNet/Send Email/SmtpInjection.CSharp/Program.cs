@@ -25,6 +25,7 @@ namespace SocketLabs.SmtpInjection.CSharp
                 smtp.Host = smtpHost;
                 smtp.Port = smtpPort;
                 smtp.Credentials = auth;
+                smtp.EnableSsl = true;
 
                 //Add SocketLabs MessageID and MailingID [ https://support.socketlabs.com/kb/48 ]
                 msg.Headers.Add("X-xsMessageId", "MyCampaign");
