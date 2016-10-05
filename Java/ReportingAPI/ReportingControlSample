@@ -1,0 +1,53 @@
+
+
+// Class the handles connecting to the Reporting API and performing the HTTP GET request
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
+import java.net.URL;
+import java.net.URLConnection;
+
+
+
+public class ReportingControlSample {
+	
+    public static void main (String[] args) {
+    	String serverId = "ServerID";//The number 4 or 5 digit ID
+        String username = "Username";//The username used to log into the Control Panel
+        String APIKey = "Reporting API key";
+        String reportType = "Type of Report you want";//accountData, messagesDelivered, etc
+        String reportInfo = null;
+    	
+    	
+        
+        try {
+              Authenticator.setDefault (new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication (username,APIKey.toCharArray());
+                  }
+              });
+            URL url = new URL 
+           ("https://api.socketlabs.com/v1/"+reportType+"?serverId="+serverId+"&type=json");
+            
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoOutput(true);
+            String line;
+            InputStream content = (InputStream)connection.getInputStream();
+            BufferedReader in   = 
+                new BufferedReader (new InputStreamReader (content));
+            reportInfo = in.readLine();      
+            while ((line = in.readLine()) != null) {
+                System.out.println(line);     //used for testing purposes         
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(reportInfo);//used for testing purposes
+    }
+}
